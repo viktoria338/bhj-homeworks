@@ -19,26 +19,30 @@ function getCoords(element) {
 
 function removeAll() {
     for (link of links) {
-        if (link.nextElementSibling) {
-            if (link.nextElementSibling.classList.contains('tooltip_active')) {
+        if (link.nextElementSibling && link.nextElementSibling.classList.contains('tooltip_active') ) {
                 link.nextElementSibling.remove();
-            }
         }
     }
 };
 
 for (link of links) {
     link.addEventListener('click', function(event) {
-        event.preventDefault();
+      event.preventDefault();
+      let coords = getCoords(this);
 
-        let coords = getCoords(this);
-
-        if (this.nextElementSibling) {
-            if (this.nextElementSibling.classList.contains('tooltip_active')) {
-                this.nextElementSibling.remove();
-            } 
-        } 
+      if(this.classList.contains('link-active')){
+        this.classList.remove('link-active');
+        removeAll()
+      } else {
         removeAll()
         createTooltip(this, this.title, coords.top, coords.left);
+
+        for (let i = 0; i < links.length; i++){
+          if(links[i].classList.contains('link-active')){
+            links[i].classList.remove('link-active')
+          }
+        }
+        this.classList.add('link-active');
+      }
     });
 };
